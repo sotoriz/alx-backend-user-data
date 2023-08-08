@@ -43,21 +43,26 @@ def forbidden_error(error) -> str:
     return jsonify({"error": "Forbidden"}), 403
 
 @app.before_request
-def request_filter() -> None:
-    """ Checks if request needs authorization
+def before_request() -> str:
+    """ Before Request Handler
+    Requests Validation
     """
-    excluded_paths = [
-        '/api/v1/status/',
-        '/api/v1/unauthorized/',
-        '/api/v1/forbidden/'
-        ]
+    if auth is None:
+        return
 
-    if auth:
-        if auth.require_auth(request.path, excluded_paths):
-            if auth.authorization_header(request) is None:
-                abort(401)
-            if auth.current_user(request) is None:
-                abort(403)
+    excluded_paths = ['/api/v1/status/',
+                      '/api/v1/unauthorized/',
+                      '/api/v1/forbidden/']
+
+    if not auth.require_auth(request.path, excluded_paths):
+        return
+
+    if auth.authorization_header(request) is None:
+        abort(401)
+
+    if auth.current_user(request) is None:
+        abort(403)
+
 
 if __name__ == "__main__":
     host = getenv("API_HOST", "0.0.0.0")
