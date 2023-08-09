@@ -29,6 +29,7 @@ def not_found(error) -> str:
     """
     return jsonify({"error": "Not found"}), 404
 
+
 @app.errorhandler(401)
 def unauthorized(error) -> str:
     """ Unauthorized handler
@@ -60,7 +61,6 @@ def request_filter() -> None:
                 abort(401)
             if auth.current_user(request) is None:
                 abort(403)
-
 
 
 if __name__ == "__main__":
