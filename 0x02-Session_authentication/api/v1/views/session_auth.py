@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-""" View of Session authentication
+""" Module of Session authentication views
 """
 from api.v1.views import app_views
 from flask import abort, jsonify, request
@@ -39,7 +39,10 @@ def login():
 
     user = found_users[0]
     session_id = auth.create_session(user.id)
+
     SESSION_NAME = getenv("SESSION_NAME")
+
     response = jsonify(user.to_json())
     response.set_cookie(SESSION_NAME, session_id)
+
     return response
