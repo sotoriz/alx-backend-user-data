@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """ DB module to save and update databse
 """
 from sqlalchemy import create_engine
